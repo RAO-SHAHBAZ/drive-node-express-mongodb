@@ -3,7 +3,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const userModel = require('../models/user.model')  // for creating user sechem
 
-
+const bcrypt = require('bcrypt')  //For Passownrd Hah Form
 // for register Page
 router.get('/register' , (req,res)=>{
     res.render('register')
@@ -18,7 +18,6 @@ router.post('/register' ,
   async  (req,res)=>{
         const errors = validationResult(req)
         if (!errors.isEmpty()){
-            console.log("Invalid data");
             return res.status(400).json({
                 errors:errors.array(),
                 messege : 'Inavalid Data'
@@ -27,11 +26,11 @@ router.post('/register' ,
         }
         // If data is valid then create users
         const {email, password, username} = req.body
-
+        const hashPassword = await bcrypt.hash(password , 10)
           const newUser = await userModel.create({
             email,
             username,
-            password
+            password: hashPassword
         })
         res.json(newUser)
         

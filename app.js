@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended:true}))
 app.use('/user',userRouter)
 
 app.get('/',(req,res)=>{
-    res.send("You Are On The Home Page")
+    res.render("index")
 })
 
 
